@@ -128,3 +128,66 @@ function doTask(pi,di,ti) {
   if(curView==='stats')  renderStatsView();
   if(curView==='focus')  renderFocusHero();
 }
+// Version Switcher
+
+const repo = "NaYa-World/80-dev-roadmap-tracker";
+const repoBase = "/80-dev-roadmap-tracker";
+
+function getCurrentVersion() {
+  const path = window.location.pathname;
+  const match = path.match(/\/v(\d+)/);
+  return match ? `v${match[1]}` : "v1";
+}
+
+async function fetchVersions() {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}/contents/`);
+    const data = await res.json();
+
+    return data
+      .filter(item => item.type === "dir" && /^v\d+$/.test(item.name))
+      .map(item => item.name)
+      .sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)));
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+}
+
+async function initVersionSwitcher() {
+  const menu = document.getElementById("version-menu");
+  const btn = document.getElementById("version-btn");
+
+  if (!menu || !btn) return;
+
+  const current = getCurrentVersion();
+  const versions = await fetchVersions();
+
+  const allVersions = ["v1", ...versions];
+
+  menu.innerHTML = "";
+
+  allVersions.forEach(v => {
+    const link = document.createElement("a");
+  
+    link.href = v === "v1"
+      ? `${repoBase}/`
+      : `${repoBase}/${v}/`;
+  
+    // ✅ Add rocket for current version
+    link.textContent = v === current ? `${v} 🚀` : v;
+  
+    if (v === current) {
+      link.classList.add("active-version");
+      btn.textContent = v + " 🚀 ▾"; // also update button
+    }
+  
+    menu.appendChild(link);
+  });
+
+  btn.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initVersionSwitcher);
