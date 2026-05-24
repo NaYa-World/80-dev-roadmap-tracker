@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>80-Day Dev Roadmap Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- Top progress strip -->
+<div id="top-strip"></div>
+
+<div class="wrap">
+
+  <!-- ── Header ── -->
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;gap:16px;">
+    <div>
+      <div class="header-eyebrow">Zero to Hired · 80 Days</div>
+      <h1 class="header-title">Dev Roadmap<br/>Tracker</h1>
+      <p class="header-sub">React · TypeScript · Tailwind · DevOps · 8–10 hrs/day</p>
+    </div>
+    <button id="theme-btn" class="theme-btn" onclick="toggleTheme()">◑ dark</button>
+  </div>
+
+  <!-- ── Stats — 5 cards ── -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num" id="s-done">0</div>
+      <div class="stat-lbl">Done</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:#ff6b6b;" id="s-left">0</div>
+      <div class="stat-lbl">Left</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="s-total">0</div>
+      <div class="stat-lbl">Total</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="background:linear-gradient(135deg,#7864ff,#00d9a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" id="s-pct">0%</div>
+      <div class="stat-lbl">Progress</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" style="color:#ffc850;" id="s-streak">0</div>
+      <div class="stat-lbl">🔥 Streak</div>
+    </div>
+  </div>
+
+  <!-- ── Overall progress bar ── -->
+  <div style="margin-bottom:16px;">
+    <div class="prog-row">
+      <span class="prog-label">overall progress</span>
+      <span class="prog-pct" id="prog-lbl">0%</span>
+    </div>
+    <div class="prog-bar">
+      <div id="prog"></div>
+    </div>
+  </div>
+
+  <!-- ── Tasks left banner ── -->
+  <div class="left-banner" id="left-banner">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7864ff" stroke-width="2.5">
+      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+    </svg>
+    <span id="left-msg">Loading...</span>
+  </div>
+
+  <!-- ── Search ── -->
+  <div class="search-wrap">
+    <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" class="search-input" placeholder="Search concepts, tasks, topics..." id="search"/>
+  </div>
+
+  <!-- ── Phase tabs ── -->
+  <div class="tab-row" id="tabs">
+    <button class="tab-pill active" data-phase="all">All phases</button>
+    <button class="tab-pill" data-phase="0">① Foundations</button>
+    <button class="tab-pill" data-phase="1">② TypeScript</button>
+    <button class="tab-pill" data-phase="2">③ React+Tailwind</button>
+    <button class="tab-pill" data-phase="3">④ DevOps</button>
+    <button class="tab-pill" data-phase="4">⑤ Projects</button>
+    <button class="tab-pill" data-phase="5">⑥ Interview</button>
+  </div>
+
+  <!-- ── Phases rendered here by JS ── -->
+  <div id="phases-wrap"></div>
+
+  <!-- ── Reset ── -->
+  <div style="text-align:center;margin-top:28px;">
+    <button class="reset-btn" onclick="if(confirm('Reset ALL progress? Cannot be undone.')) resetAll()">
+      ↺ reset all progress
+    </button>
+  </div>
+
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
