@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
+  
 <div id="top-strip"></div>
 
 <!-- ═══════════ NAV ═══════════ -->
@@ -26,6 +27,10 @@
   </div>
   <div class="nav-right">
     <button class="nav-btn" id="pomo-nav-btn">⏱ Pomodoro</button>
+    <div id="version-switcher">
+      <button id="version-btn">Version ▾</button>
+      <div id="version-menu" class="hidden"></div>
+    </div>
     <button class="nav-btn" id="theme-btn">◑ Dark</button>
   </div>
 </nav>
@@ -279,6 +284,63 @@ if("serviceWorker" in navigator){
     navigator.serviceWorker.register("./sw.js").then(function(r){ console.log("SW registered"); }).catch(function(e){ console.log("SW failed",e); });
   });
 }
+</script>
+<script>
+const repo = "NaYa-World/80-dev-roadmap-tracker";
+const repoBase = "/80-dev-roadmap-tracker";
+
+function getCurrentVersion() {
+  const path = window.location.pathname;
+  const match = path.match(/\/v(\d+)/);
+  return match ? `v${match[1]}` : "v1";
+}
+
+async function fetchVersions() {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${repo}/contents/`);
+    const data = await res.json();
+
+    const versions = data
+      .filter(item => item.type === "dir" && /^v\d+$/.test(item.name))
+      .map(item => item.name)
+      .sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)));
+
+    return ["v1", ...versions];
+  } catch (err) {
+    console.error(err);
+    return ["v1"];
+  }
+}
+
+async function generateVersions() {
+  const menu = document.getElementById("version-menu");
+  const current = getCurrentVersion();
+  const versions = await fetchVersions();
+
+  menu.innerHTML = "";
+
+  versions.forEach(v => {
+    const link = document.createElement("a");
+
+    link.href = v === "v1"
+      ? `${repoBase}/`
+      : `${repoBase}/${v}/`;
+
+    link.textContent = v;
+
+    if (v === current) {
+      link.classList.add("active-version");
+    }
+
+    menu.appendChild(link);
+  });
+}
+
+document.getElementById("version-btn").onclick = () => {
+  document.getElementById("version-menu").classList.toggle("hidden");
+};
+
+generateVersions();
 </script>
 </body>
 </html>
