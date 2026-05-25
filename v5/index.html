@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="theme-color" content="#07070e"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>Dev Roadmap v5 — Zero to Hired</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<div id="top-strip"></div>
+
+<!-- ═══════ DESKTOP NAV ═══════ -->
+<nav id="nav">
+  <div class="nav-brand"><span class="g">DEV</span><span class="p">MAP</span> v5</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-view="roadmap">☑ Roadmap</button>
+    <button class="nav-tab" data-view="kanban">⊞ Kanban</button>
+    <button class="nav-tab" data-view="focus">◎ Daily Focus</button>
+    <button class="nav-tab" data-view="stats">◈ Stats</button>
+    <button class="nav-tab" data-view="jobs">💼 Jobs</button>
+    <button class="nav-tab" data-view="qbank">❓ Q-Bank</button>
+    <button class="nav-tab" data-view="report">📊 Report</button>
+    <button class="nav-tab" data-view="github">🐙 GitHub</button>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn" id="pomo-nav-btn">⏱ Pomodoro</button>
+    <div id="version-switcher">
+      <button id="version-btn">v5 Latest ▾</button>
+      <div id="version-menu" class="hidden"></div>
+    </div>
+    <button class="nav-btn" id="theme-btn">◑ Dark</button>
+  </div>
+</nav>
+
+<!-- ═══════ MOBILE BOTTOM BAR ═══════ -->
+<div id="bottom-bar">
+  <button class="btab active" data-view="roadmap"><span class="bico">☑</span><span class="btab-label">Roadmap</span></button>
+  <button class="btab" data-view="kanban"><span class="bico">⊞</span><span class="btab-label">Kanban</span></button>
+  <button class="btab" data-view="focus"><span class="bico">◎</span><span class="btab-label">Focus</span></button>
+  <button class="btab" data-view="stats"><span class="bico">◈</span><span class="btab-label">Stats</span></button>
+  <button class="btab" data-view="jobs"><span class="bico">💼</span><span class="btab-label">Jobs</span></button>
+  <button class="btab" data-view="qbank"><span class="bico">❓</span><span class="btab-label">Q-Bank</span></button>
+  <button class="btab" data-view="report"><span class="bico">📊</span><span class="btab-label">Report</span></button>
+  <button class="btab" data-view="github"><span class="bico">🐙</span><span class="btab-label">GitHub</span></button>
+</div>
+
+<!-- ═══════ POMODORO MODAL ═══════ -->
+<div class="modal" id="pomo-modal">
+  <div class="modal-box">
+    <button class="modal-close" id="pomo-close">✕</button>
+    <div style="font-size:16px;font-weight:700;margin-bottom:18px;text-align:center">⏱ Pomodoro Timer</div>
+    <div class="pomo-mode-row">
+      <button class="pomo-mode-btn active" data-mode="focus">Focus 25m</button>
+      <button class="pomo-mode-btn" data-mode="short">Break 5m</button>
+      <button class="pomo-mode-btn" data-mode="long">Long 15m</button>
+    </div>
+    <div class="pomo-ring">
+      <svg class="pomo-svg" width="170" height="170" viewBox="0 0 170 170">
+        <circle class="pomo-track" cx="85" cy="85" r="70"/>
+        <circle class="pomo-prog" id="pomo-prog" cx="85" cy="85" r="70"/>
+      </svg>
+      <div class="pomo-time">
+        <div class="pomo-time-num" id="pomo-num">25:00</div>
+        <div class="pomo-time-lbl" id="pomo-lbl">FOCUS</div>
+      </div>
+    </div>
+    <div class="pomo-controls">
+      <button class="pomo-ctrl-btn reset" id="pomo-reset">↺</button>
+      <button class="pomo-ctrl-btn main" id="pomo-play">▶</button>
+    </div>
+    <div class="pomo-sessions" id="pomo-sessions">Sessions today: 0 · 0.0 hrs studied</div>
+  </div>
+</div>
+
+<!-- ═══════ ADD JOB MODAL ═══════ -->
+<div class="modal" id="job-modal">
+  <div class="modal-box">
+    <button class="modal-close" id="jm-x">✕</button>
+    <div class="modal-title">+ Add Job Application</div>
+    <div class="jm-field"><label class="jm-label">Company *</label><input class="jm-input" id="jm-company" placeholder="e.g. Freshworks, Zoho, Amazon India"/></div>
+    <div class="jm-field"><label class="jm-label">Role *</label><input class="jm-input" id="jm-role" placeholder="e.g. Frontend Developer, React Engineer"/></div>
+    <div class="jm-field"><label class="jm-label">Source</label>
+      <select class="jm-select" id="jm-source">
+        <option>LinkedIn</option><option>Naukri</option><option>Wellfound</option>
+        <option>Company site</option><option>Referral</option><option>Other</option>
+      </select>
+    </div>
+    <div class="jm-field"><label class="jm-label">Notes</label><input class="jm-input" id="jm-notes" placeholder="Salary range, recruiter name, tech stack…"/></div>
+    <div class="jm-actions">
+      <button class="jm-cancel" id="jm-cancel">Cancel</button>
+      <button class="jm-save" id="jm-save">Save Application</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     VIEW 1 — ROADMAP
+═══════════════════════════════════ -->
+<div id="view-roadmap" class="view active">
+  <div class="wrap">
+    <div style="margin-bottom:24px">
+      <div class="eyebrow">Zero to Hired · 80 Days</div>
+      <h1 class="page-title">Dev Roadmap Tracker</h1>
+      <p class="page-sub">React · TypeScript · Tailwind · DevOps · 8–10 hrs/day</p>
+    </div>
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="sc"><div class="sc-num" data-stat="done">0</div><div class="sc-lbl">Done</div></div>
+      <div class="sc"><div class="sc-num" style="color:var(--red)" data-stat="left">0</div><div class="sc-lbl">Left</div></div>
+      <div class="sc"><div class="sc-num" data-stat="total">0</div><div class="sc-lbl">Total</div></div>
+      <div class="sc"><div class="sc-num" style="background:linear-gradient(135deg,#7864ff,#00d9a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-stat="pct">0%</div><div class="sc-lbl">Progress</div></div>
+      <div class="sc"><div class="sc-num" style="color:var(--amber)" data-stat="streak">0</div><div class="sc-lbl">🔥 Streak</div></div>
+      <div class="sc"><div class="sc-num" style="color:var(--teal)" data-stat="hours">0h</div><div class="sc-lbl">⏱ Studied</div></div>
+    </div>
+    <div class="prog-row"><span class="prog-label">OVERALL PROGRESS</span><span class="prog-label" data-stat="prog-lbl">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" style="width:0%"></div></div>
+    <div class="banner"><span style="font-size:16px">🕐</span><span id="left-msg">Loading…</span></div>
+
+    <!-- Search 2.0 -->
+    <div class="search-v2-wrap">
+      <div class="search-v2-top">
+        <span class="search-v2-ico">🔍</span>
+        <input type="text" id="search-v2-input" class="search-v2-input" placeholder="Search concepts, tasks, topics…"/>
+        <button class="search-v2-clear" id="search-v2-clear" title="Clear search">✕</button>
+      </div>
+      <div class="search-filters">
+        <button class="sf-chip f-type-concept" data-type="type" data-val="concept">concept</button>
+        <button class="sf-chip f-type-code" data-type="type" data-val="code">code</button>
+        <button class="sf-chip f-type-quiz" data-type="type" data-val="quiz">quiz</button>
+        <button class="sf-chip f-type-project" data-type="type" data-val="project">project</button>
+        <button class="sf-chip f-status" data-type="status" data-val="incomplete">incomplete only</button>
+        <button class="sf-chip f-status" data-type="status" data-val="done">done only</button>
+      </div>
+      <div class="search-results-lbl" id="search-results-lbl"></div>
+    </div>
+
+    <!-- Phase tabs -->
+    <div class="tab-row" id="phase-tabs">
+      <button class="pill active" data-phase="all">All phases</button>
+      <button class="pill" data-phase="0">① Foundations</button>
+      <button class="pill" data-phase="1">② TypeScript</button>
+      <button class="pill" data-phase="2">③ React+Tailwind</button>
+      <button class="pill" data-phase="3">④ DevOps</button>
+      <button class="pill" data-phase="4">⑤ Projects</button>
+      <button class="pill" data-phase="5">⑥ Interview</button>
+    </div>
+    <div id="roadmap-wrap"></div>
+    <div style="text-align:center;margin-top:32px">
+      <button class="nav-btn" id="reset-btn" style="font-size:13px;padding:10px 20px">↺ Reset learning progress</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     VIEW 2 — KANBAN
+═══════════════════════════════════ -->
+<div id="view-kanban" class="view">
+  <div class="wrap wide">
+    <div style="margin-bottom:20px">
+      <div class="eyebrow">Progress at a glance</div>
+      <h2 class="page-title">Kanban Board</h2>
+      <p class="page-sub">🟢 high confidence · 🟡 medium · 🔴 low · 📝 has notes. Click any card to jump to that day.</p>
+    </div>
+    <div class="tab-row" id="kb-filter">
+      <button class="pill active" data-phase="all">All phases</button>
+      <button class="pill" data-phase="0">⬡ Foundations</button>
+      <button class="pill" data-phase="1">T TypeScript</button>
+      <button class="pill" data-phase="2">⚛ React</button>
+      <button class="pill" data-phase="3">☁ DevOps</button>
+      <button class="pill" data-phase="4">◈ Projects</button>
+      <button class="pill" data-phase="5">◉ Interview</button>
+    </div>
+    <div class="kanban-grid" id="kanban-wrap"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     VIEW 3 — DAILY FOCUS
+═══════════════════════════════════ -->
+<div id="view-focus" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:20px">
+      <div class="eyebrow">Stay in the zone</div>
+      <h2 class="page-title">Daily Focus</h2>
+      <p class="page-sub">Auto-selects your next incomplete day. AI brief + Code Reviewer included.</p>
+    </div>
+    <!-- AI Brief -->
+    <div class="brief-card">
+      <div class="brief-hdr">
+        <div class="brief-icon">🤖</div>
+        <div><div class="brief-title">AI Daily Brief</div><div class="brief-sub">Personalised coaching based on your real progress · Refreshes daily</div></div>
+      </div>
+      <div class="brief-content loading" id="brief-content"><div class="brief-dots"><span></span><span></span><span></span></div> Generating your brief…</div>
+      <div class="brief-actions">
+        <button class="brief-btn primary" id="brief-open-claude">↗ Chat with Claude</button>
+        <button class="brief-btn secondary" id="brief-refresh">↺ Refresh</button>
+      </div>
+    </div>
+    <!-- Hero -->
+    <div class="focus-hero" id="focus-hero">
+      <div class="focus-tag" id="focus-tag">Day 1</div>
+      <div class="focus-title" id="focus-title">Loading…</div>
+      <div class="focus-meta" id="focus-meta"></div>
+      <div class="focus-stats-row">
+        <div><div class="fstat-num" id="focus-done">0</div><div class="fstat-lbl">Done</div></div>
+        <div><div class="fstat-num" id="focus-left">0</div><div class="fstat-lbl">Left</div></div>
+        <div><div class="fstat-num" id="focus-pct">0%</div><div class="fstat-lbl">Progress</div></div>
+      </div>
+      <div class="prog-track" style="margin-bottom:0"><div class="prog-fill" id="focus-prog" style="width:0%"></div></div>
+    </div>
+    <div class="focus-nav-pills" id="focus-nav"></div>
+    <div class="focus-card">
+      <div class="focus-card-hdr">
+        <span style="font-size:18px">✅</span>
+        <span class="focus-card-title">Today's Tasks</span>
+        <span class="focus-card-count" id="focus-count">0/0 done</span>
+      </div>
+      <div class="focus-card-body" id="focus-body"></div>
+    </div>
+    <div class="time-blocks">
+      <div class="time-block"><div class="tb-icon">🌅</div><div class="tb-title">Morning — 2 hrs</div><div class="tb-sub">Read every concept first. No coding yet. Build the mental model before touching the keyboard.</div></div>
+      <div class="time-block"><div class="tb-icon">💻</div><div class="tb-title">Midday — 4–5 hrs</div><div class="tb-sub">Code the exercises from memory. Use the AI Code Reviewer below each day to get feedback before moving on.</div></div>
+      <div class="time-block"><div class="tb-icon">🌙</div><div class="tb-title">Evening — 2–3 hrs</div><div class="tb-sub">Rate your confidence on each task. Write notes. Quiz yourself. Push to GitHub. Every single day.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     VIEW 4 — STATS
+═══════════════════════════════════ -->
+<div id="view-stats" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:24px">
+      <div class="eyebrow">Your numbers</div>
+      <h2 class="page-title">Stats Dashboard</h2>
+      <p class="page-sub">ETA · Readiness · Hours · Confidence gaps · Heatmap · Streak</p>
+    </div>
+    <div class="stats-row">
+      <div class="sc"><div class="sc-num" data-stat="done">0</div><div class="sc-lbl">Done</div></div>
+      <div class="sc"><div class="sc-num" style="color:var(--red)" data-stat="left">0</div><div class="sc-lbl">Left</div></div>
+      <div class="sc"><div class="sc-num" data-stat="total">0</div><div class="sc-lbl">Total</div></div>
+      <div class="sc"><div class="sc-num" style="background:linear-gradient(135deg,#7864ff,#00d9a0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text" data-stat="pct">0%</div><div class="sc-lbl">Progress</div></div>
+      <div class="sc"><div class="sc-num" style="color:var(--amber)" data-stat="streak">0</div><div class="sc-lbl">🔥 Streak</div></div>
+      <div class="sc"><div class="sc-num" style="color:var(--teal)" data-stat="hours">0h</div><div class="sc-lbl">⏱ Studied</div></div>
+    </div>
+    <div class="dash-grid" id="stats-wrap"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     VIEW 5 — JOBS
+═══════════════════════════════════ -->
+<div id="view-jobs" class="view">
+  <div class="wrap wide">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+      <div>
+        <div class="eyebrow">The finish line</div>
+        <h2 class="page-title">Job Tracker</h2>
+        <p class="page-sub">Track every application — Applied → Phone → Technical → Offer.</p>
+      </div>
+      <button class="brief-btn primary" id="job-add-btn" style="flex-shrink:0;font-size:14px">+ Add Application</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px" id="job-stats"></div>
+    <div class="job-kanban" id="jobs-wrap"></div>
+    <div style="margin-top:24px;padding:18px 20px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r12)">
+      <div style="font-size:15px;font-weight:600;margin-bottom:8px">📋 Hyderabad job hunt strategy</div>
+      <div style="font-size:14px;color:var(--sub);line-height:1.75">
+        Apply to <strong style="color:var(--text)">20+ jobs per week</strong> from Day 78 — LinkedIn Easy Apply, Naukri.com, Wellfound, and company career pages.
+        <strong style="color:var(--text)">Customise your resume</strong> for each JD (match keywords exactly).
+        Target: Freshworks, Zoho, Microsoft IDC, Amazon, Infosys, Wipro, and funded startups on Wellfound.
+        <strong style="color:var(--text)">Research each company</strong> before every interview — product, tech stack, recent news.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     VIEW 6 — QUESTION BANK
+═══════════════════════════════════ -->
+<div id="view-qbank" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:20px">
+      <div class="eyebrow">Interview preparation</div>
+      <h2 class="page-title">Question Bank</h2>
+      <p class="page-sub">60+ real interview questions · JS · TS · React · DevOps · System Design · Behavioral</p>
+    </div>
+    <!-- Search -->
+    <input type="text" id="qbank-search-input" class="qbank-search" placeholder="Search questions…"/>
+    <!-- Filters -->
+    <div class="qbank-filters">
+      <button class="pill qb-filter-chip" data-type="cat" data-val="js">JavaScript</button>
+      <button class="pill qb-filter-chip" data-type="cat" data-val="ts">TypeScript</button>
+      <button class="pill qb-filter-chip" data-type="cat" data-val="react">React/Next.js</button>
+      <button class="pill qb-filter-chip" data-type="cat" data-val="css">CSS/Tailwind</button>
+      <button class="pill qb-filter-chip" data-type="cat" data-val="devops">DevOps</button>
+      <button class="pill qb-filter-chip" data-type="cat" data-val="system">System Design</button>
+      <button class="pill qb-filter-chip" data-type="cat" data-val="behavioral">Behavioral</button>
+      <span style="width:1px;background:var(--border);margin:0 4px;align-self:stretch"></span>
+      <button class="pill qb-filter-chip" data-type="diff" data-val="easy" style="background:rgba(0,217,160,.06);color:var(--green);border-color:rgba(0,217,160,.2)">Easy</button>
+      <button class="pill qb-filter-chip" data-type="diff" data-val="med" style="background:rgba(255,200,80,.06);color:var(--amber);border-color:rgba(255,200,80,.2)">Medium</button>
+      <button class="pill qb-filter-chip" data-type="diff" data-val="hard" style="background:rgba(255,96,96,.06);color:var(--red);border-color:rgba(255,96,96,.2)">Hard</button>
+    </div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--sub);margin-bottom:14px" id="qbank-count"></div>
+    <div id="qbank-wrap"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     VIEW 7 — WEEKLY REPORT
+═══════════════════════════════════ -->
+<div id="view-report" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:24px">
+      <div class="eyebrow">Weekly retrospective</div>
+      <h2 class="page-title">Weekly Report</h2>
+      <p class="page-sub">Review your week · Track trends · Export your progress</p>
+    </div>
+    <div class="report-card" id="report-card">
+      <!-- Week navigation -->
+      <div class="report-week-nav">
+        <button class="report-week-btn" id="report-prev">←</button>
+        <span class="report-week-label" id="report-week-label">This week</span>
+        <button class="report-week-btn" id="report-next">→</button>
+      </div>
+      <!-- Week stats grid -->
+      <div class="report-grid">
+        <div class="report-stat"><div class="report-stat-num" style="color:var(--green)">0</div><div class="report-stat-lbl">Tasks this week</div></div>
+        <div class="report-stat"><div class="report-stat-num" style="color:var(--blue)">0/7</div><div class="report-stat-lbl">Active days</div></div>
+        <div class="report-stat"><div class="report-stat-num" style="color:var(--amber)">0h</div><div class="report-stat-lbl">Hours studied</div></div>
+        <div class="report-stat"><div class="report-stat-num" style="color:var(--purple)">0%</div><div class="report-stat-lbl">Readiness</div></div>
+      </div>
+      <!-- Day-by-day breakdown -->
+      <div class="report-section-title">Day by day</div>
+      <div id="report-day-bars"></div>
+      <!-- Export -->
+      <button class="report-export-btn" id="report-export">
+        ↓ Export as text file
+      </button>
+    </div>
+    <!-- Overall context -->
+    <div class="report-card">
+      <div class="report-section-title" style="margin-bottom:14px">Overall so far</div>
+      <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
+        <div class="sc"><div class="sc-num" data-stat="done">0</div><div class="sc-lbl">Tasks Done</div></div>
+        <div class="sc"><div class="sc-num" data-stat="streak">0</div><div class="sc-lbl">🔥 Streak</div></div>
+        <div class="sc"><div class="sc-num" data-stat="hours">0h</div><div class="sc-lbl">⏱ Studied</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     VIEW 8 — GITHUB
+═══════════════════════════════════ -->
+<div id="view-github" class="view">
+  <div class="wrap">
+    <div style="margin-bottom:24px">
+      <div class="eyebrow">Accountability</div>
+      <h2 class="page-title">GitHub Tracker</h2>
+      <p class="page-sub">See your real commit graph · Get warned if you haven't pushed today</p>
+    </div>
+    <div class="gh-card">
+      <div class="gh-input-wrap">
+        <input type="text" id="gh-username-input" class="gh-input" placeholder="Enter your GitHub username…"/>
+        <button class="gh-fetch-btn" id="gh-fetch-btn">Load Profile</button>
+      </div>
+      <div id="gh-card-content">
+        <div style="color:var(--sub);font-size:14px;text-align:center;padding:30px 0">Enter your GitHub username above to see your commit graph and get a daily push reminder.</div>
+      </div>
+    </div>
+    <div style="padding:18px 20px;background:var(--s2);border:1px solid var(--border);border-radius:var(--r12);margin-top:16px">
+      <div style="font-size:15px;font-weight:600;margin-bottom:8px">🟩 Why push to GitHub every day?</div>
+      <div style="font-size:14px;color:var(--sub);line-height:1.75">
+        Recruiters and hiring managers <strong style="color:var(--text)">look at your GitHub contribution graph</strong> before your first interview.
+        A full green graph from the start of your 80-day journey signals consistency, discipline, and real coding habit.
+        Even on slow days — push a README update, fix a comment, add a test. The habit matters more than the commit size.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/state.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/pomodoro.js"></script>
+<script src="js/ai-brief.js"></script>
+<script src="js/questions.js"></script>
+<script src="js/views.js"></script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('./sw.js').catch(function(e){console.log('SW:',e);});
+  });
+}
+</script>
+</body>
+</html>
